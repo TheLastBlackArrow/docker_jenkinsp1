@@ -1,33 +1,37 @@
-FROM eclipse-temurin:17.0.5_8-jdk-alpine AS jre-build
+# No docker image support java 11 on arm32v6. Using Zulu instead
+# FROM eclipse-temurin:11.0.16.1_1-jdk-focal as jre-build
 
-# Generate smaller java runtime without unneeded files
-# for now we include the full module path to maintain compatibility
-# while still saving space (approx 200mb from the full distribution)
-RUN apk add --no-cache binutils \
-  && jlink \
-         --add-modules ALL-MODULE-PATH \
-         --strip-debug \
-         --no-man-pages \
-         --no-header-files \
-         --compress=2 \
-         --output /javaruntime
+# RUN jlink \
+#          --add-modules ALL-MODULE-PATH \
+#          --strip-debug \
+#          --no-man-pages \
+#          --no-header-files \
+#          --compress=2 \
+#          --output /javaruntime
 
-FROM alpine:3.17.0
+# always using latest cause pi1 will be supported by raspberian
+FROM debian:bullseye-slim
 
-RUN apk add --no-cache \
-    bash \
-    coreutils \
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends \
+    ca-certificates \
     curl \
     git \
-    git-lfs \
     gnupg \
-    musl-locales \
-    musl-locales-lang \
-    openssh-client \
+    gpg \
+    libfontconfig1 \
+    libfreetype6 \
+    ssh-client \
     tini \
-    ttf-dejavu \
-    tzdata \
     unzip \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh -o /tmp/script.deb.sh \
+  && bash /tmp/script.deb.sh \
+  && rm -f /tmp/script.deb.sh \
+  && apt-get install -y --no-install-recommends \
+    git-lfs \
+  && rm -rf /var/lib/apt/lists/* \
   && git lfs install
 
 ENV LANG C.UTF-8
@@ -53,8 +57,8 @@ ENV REF $REF
 # ensure you use the same uid
 RUN mkdir -p $JENKINS_HOME \
   && chown ${uid}:${gid} $JENKINS_HOME \
-  && addgroup -g ${gid} ${group} \
-  && adduser -h "$JENKINS_HOME" -u ${uid} -G ${group} -s /bin/bash -D ${user}
+  && groupadd -g ${gid} ${group} \
+  && useradd -d "$JENKINS_HOME" -u ${uid} -g ${gid} -l -m -s /bin/bash ${user}
 
 # Jenkins home directory is a volume, so configuration and build history
 # can be persisted and survive image upgrades
@@ -99,22 +103,29 @@ EXPOSE ${agent_port}
 
 ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
 
+COPY 11/debian/bullseye-slim/arm32v6/install-java.sh ./install-java.sh
+RUN chmod u+x ./install-java.sh && ./install-java.sh
+
 ENV JAVA_HOME=/opt/java/openjdk
 ENV PATH "${JAVA_HOME}/bin:${PATH}"
-COPY --from=jre-build /javaruntime $JAVA_HOME
+# COPY --from=jre-build /javaruntime $JAVA_HOME
 
 USER ${user}
 
 COPY jenkins-support /usr/local/bin/jenkins-support
 COPY jenkins.sh /usr/local/bin/jenkins.sh
+COPY tini-shim.sh /sbin/tini
 COPY jenkins-plugin-cli.sh /bin/jenkins-plugin-cli
 
-ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/jenkins.sh"]
+ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
+
+# from a derived Dockerfile, can use `RUN install-plugins.sh active.txt` to setup $REF/plugins from a support bundle
+COPY install-plugins.sh /usr/local/bin/install-plugins.sh
 
 # metadata labels
 LABEL \
-    org.opencontainers.image.vendor="Jenkins project" \
-    org.opencontainers.image.title="Official Jenkins Docker image" \
+    org.opencontainers.image.vendor="Jenkins Arm32v6 project" \
+    org.opencontainers.image.title="Internal Jenkins Docker image for pi1" \
     org.opencontainers.image.description="The Jenkins Continuous Integration and Delivery server" \
     org.opencontainers.image.version="${JENKINS_VERSION}" \
     org.opencontainers.image.url="https://www.jenkins.io/" \

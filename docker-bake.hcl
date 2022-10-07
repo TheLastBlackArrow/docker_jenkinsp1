@@ -10,7 +10,14 @@ group "linux" {
     "debian_jdk17",
     "debian_slim_jdk11",
     "debian_slim_jdk17",
-    "rhel_ubi8_jdk11"
+    "rhel_ubi8_jdk11",
+    "debian_slim_jdk11_arm32v6"
+  ]
+}
+
+group "linux-arm-v6" {
+  targets = [
+    "debian_slim_jdk11_arm32v6"
   ]
 }
 
@@ -29,18 +36,14 @@ group "linux-s390x" {
   ]
 }
 
-group "linux-ppc64le" {
-  targets = []
-}
-
 # ---- variables ----
 
 variable "JENKINS_VERSION" {
-  default = "2.356"
+  default = "2.375.2"
 }
 
 variable "JENKINS_SHA" {
-  default = "1163c4554dc93439c5eef02b06a8d74f98ca920bbc012c2b8a089d414cfa8075"
+  default = "e572525f7fa43b082e22896f72570297d88daec4f36ab4f25fdadca885f95492"
 }
 
 variable "REGISTRY" {
@@ -48,7 +51,7 @@ variable "REGISTRY" {
 }
 
 variable "JENKINS_REPO" {
-  default = "jenkins/jenkins"
+  default = "lelai123/jenkins_pi1"
 }
 
 variable "LATEST_WEEKLY" {
@@ -56,7 +59,7 @@ variable "LATEST_WEEKLY" {
 }
 
 variable "LATEST_LTS" {
-  default = "false"
+  default = "true"
 }
 
 variable "PLUGIN_CLI_VERSION" {
@@ -209,6 +212,28 @@ target "debian_jdk17" {
     tag_lts(true, "lts-jdk17")
   ]
   platforms = ["linux/amd64", "linux/arm64"]
+}
+
+target "debian_slim_jdk11_arm32v6" {
+  dockerfile = "11/debian/bullseye-slim/arm32v6/Dockerfile"
+  context = "."
+  args = {
+    JENKINS_VERSION = JENKINS_VERSION
+    JENKINS_SHA = JENKINS_SHA
+    COMMIT_SHA = COMMIT_SHA
+    PLUGIN_CLI_VERSION = PLUGIN_CLI_VERSION
+  }
+  tags = [
+    tag(true, ""),
+    tag(false, "jdk11"),
+    tag_weekly(false, "slim"),
+    tag_weekly(false, "slim-jdk11_arm32v6"),
+    tag_lts(false, "lts-slim"),
+    tag_lts(false, "lts-slim-jdk11_arm32v6"),
+    tag_lts(false, "lts-slim"),
+    tag_lts(true, "lts-slim-jdk11_arm32v6")
+  ]
+  platforms = ["linux/arm/v6"]
 }
 
 target "debian_slim_jdk11" {
