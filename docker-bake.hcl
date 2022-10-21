@@ -14,6 +14,12 @@ group "linux" {
   ]
 }
 
+group "linux-arm32v6" {
+  targets = [
+    "debian_slim_jdk11_arm32v6"
+  ]
+}
+
 group "linux-arm64" {
   targets = [
     "almalinux_jdk11",
@@ -205,6 +211,26 @@ target "debian_jdk17" {
     tag_lts(true, "lts-jdk17")
   ]
   platforms = ["linux/amd64", "linux/arm64"]
+}
+
+target "debian_slim_jdk11_arm32v6" {
+  dockerfile = "11/debian/bullseye-slim/arm32v6/Dockerfile"
+  context = "."
+  args = {
+    JENKINS_VERSION = JENKINS_VERSION
+    JENKINS_SHA = JENKINS_SHA
+    COMMIT_SHA = COMMIT_SHA
+    PLUGIN_CLI_VERSION = PLUGIN_CLI_VERSION
+  }
+  tags = [
+    tag(true, "slim"),
+    tag_weekly(false, "slim"),
+    tag_weekly(false, "slim-jdk11_arm32v6"),
+    tag_lts(false, "lts-slim"),
+    tag_lts(false, "lts-slim-jdk11_arm32v6"),
+    tag_lts(true, "lts-slim"),
+  ]
+  platforms = ["linux/arm32v6"]
 }
 
 target "debian_slim_jdk11" {
