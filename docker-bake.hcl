@@ -14,7 +14,7 @@ group "linux" {
   ]
 }
 
-group "linux-arm32v6" {
+group "linux-arm-v6" {
   targets = [
     "debian_slim_jdk11_arm32v6"
   ]
