@@ -14,7 +14,7 @@ group "linux" {
   ]
 }
 
-group "linux-arm-v6" {
+group "linux-armv6" {
   targets = [
     "debian_slim_jdk11_arm32v6"
   ]
@@ -50,7 +50,7 @@ variable "REGISTRY" {
 }
 
 variable "JENKINS_REPO" {
-  default = "jenkins/jenkins"
+  default = "lelai123/jenkins_pi1"
 }
 
 variable "LATEST_WEEKLY" {
@@ -230,7 +230,7 @@ target "debian_slim_jdk11_arm32v6" {
     tag_lts(false, "lts-slim-jdk11_arm32v6"),
     tag_lts(true, "lts-slim"),
   ]
-  platforms = ["linux/arm/v6"]
+  platforms = ["linux/armv6"]
 }
 
 target "debian_slim_jdk11" {
