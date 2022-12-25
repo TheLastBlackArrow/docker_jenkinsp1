@@ -29,17 +29,6 @@ stage('Build') {
                 stage("Build linux-${imageToBuild}") {
                     sh "make build-${imageToBuild}"
                 }
-
-                stage("Test linux-${imageToBuild}") {
-                    sh "make prepare-test"
-                    try {
-                        sh "make test-${imageToBuild}"
-                    } catch (err) {
-                        error("${err.toString()}")
-                    } finally {
-                        junit(allowEmptyResults: true, keepLongStdio: true, testResults: 'target/*.xml')
-                    }
-                }
             }
         }
     }
