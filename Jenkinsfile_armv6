@@ -19,15 +19,16 @@ stage('Build') {
                     checkout scm
                 }
 
-                // stage('Static analysis') {
-                //     sh 'make hadolint shellcheck'
-                // }
-
-                /* Outside of the trusted.ci environment, we're building and testing
-                * the Dockerfile in this repository, but not publishing to docker hub
-                */
                 stage("Build linux-${imageToBuild}") {
                     sh "make build-${imageToBuild}"
+                }
+
+                stage("Publish ${imageToBuild}") {
+                    withCredentials([usernamePassword(credentialsId: 'DOCKER_TOKEN', passwordVariable: 'docker_pw', usernameVariable: 'docker_usr')]) {
+                        sh """docker login -u $docker_usr -p $docker_pw
+                        docker push lelai123/jenkins_pi1:2.383-slim
+                        """
+                    }   
                 }
             }
         }
