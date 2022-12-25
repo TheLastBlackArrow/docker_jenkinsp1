@@ -1,0 +1,48 @@
+#!/usr/bin/env groovy
+
+def listOfProperties = []
+listOfProperties << buildDiscarder(logRotator(numToKeepStr: '50', artifactNumToKeepStr: '5'))
+properties(listOfProperties)
+
+stage('Build') {
+    def builds = [:]
+    def images = [
+        'debian_slim_jdk11_arm32v6',
+    ]
+    for (i in images) {
+        def imageToBuild = i
+        builds[imageToBuild] = {
+            node('pi1') {
+                deleteDir()
+
+                stage('Checkout') {
+                    checkout scm
+                }
+
+                // stage('Static analysis') {
+                //     sh 'make hadolint shellcheck'
+                // }
+
+                /* Outside of the trusted.ci environment, we're building and testing
+                * the Dockerfile in this repository, but not publishing to docker hub
+                */
+                stage("Build linux-${imageToBuild}") {
+                    sh "make build-${imageToBuild}"
+                }
+
+                stage("Test linux-${imageToBuild}") {
+                    sh "make prepare-test"
+                    try {
+                        sh "make test-${imageToBuild}"
+                    } catch (err) {
+                        error("${err.toString()}")
+                    } finally {
+                        junit(allowEmptyResults: true, keepLongStdio: true, testResults: 'target/*.xml')
+                    }
+                }
+            }
+        }
+    }
+    parallel builds
+}
+

@@ -10,11 +10,12 @@ group "linux" {
     "debian_jdk17",
     "debian_slim_jdk11",
     "debian_slim_jdk17",
-    "rhel_ubi8_jdk11"
+    "rhel_ubi8_jdk11",
+    "debian_slim_jdk11_arm32v6"
   ]
 }
 
-group "linux-armv6" {
+group "linux-arm-v6" {
   targets = [
     "debian_slim_jdk11_arm32v6"
   ]
@@ -230,7 +231,7 @@ target "debian_slim_jdk11_arm32v6" {
     tag_lts(false, "lts-slim-jdk11_arm32v6"),
     tag_lts(true, "lts-slim"),
   ]
-  platforms = ["linux/armv6"]
+  platforms = ["linux/arm/v6"]
 }
 
 target "debian_slim_jdk11" {
