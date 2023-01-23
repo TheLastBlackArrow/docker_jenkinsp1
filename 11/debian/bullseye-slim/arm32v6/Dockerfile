@@ -106,8 +106,8 @@ ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
 COPY 11/debian/bullseye-slim/arm32v6/install-java.sh ./install-java.sh
 RUN chmod u+x ./install-java.sh && ./install-java.sh
 
-# ENV JAVA_HOME=/usr/bin/java
-# ENV PATH "${JAVA_HOME}/bin:${PATH}"
+ENV JAVA_HOME=/usr/bin/java
+ENV PATH "${JAVA_HOME}/bin:${PATH}"
 # COPY --from=jre-build /javaruntime $JAVA_HOME
 
 USER ${user}
