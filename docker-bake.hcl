@@ -224,7 +224,7 @@ target "debian_slim_jdk11_arm32v6" {
     PLUGIN_CLI_VERSION = PLUGIN_CLI_VERSION
   }
   tags = [
-    tag(false, ""),
+    tag(true, ""),
     tag(false, "jdk11"),
     tag_weekly(false, "slim"),
     tag_weekly(false, "slim-jdk11_arm32v6"),
