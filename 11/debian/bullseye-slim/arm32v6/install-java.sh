@@ -7,5 +7,5 @@ tar -xzvf $javaZuluName.tar.gz
 rm $javaZuluName.tar.gz
 mv $javaZuluName openjdk
 # java path will create symlink: /usr/bin/java --> /etc/alternatives/java
-update-alternatives --install /usr/bin/java java /opt/java/openjdk/bin/java 1
-update-alternatives --install /usr/bin/javac javac /opt/java/openjdk/bin/javac 1
+#update-alternatives --install /usr/bin/java java /opt/java/openjdk/bin/java 1
+#update-alternatives --install /usr/bin/javac javac /opt/java/openjdk/bin/javac 1

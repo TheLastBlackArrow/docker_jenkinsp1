@@ -225,12 +225,6 @@ target "debian_slim_jdk11_arm32v6" {
   }
   tags = [
     tag(true, ""),
-    tag(false, "jdk11"),
-    tag_weekly(false, "slim"),
-    tag_weekly(false, "slim-jdk11_arm32v6"),
-    tag_lts(false, "lts-slim"),
-    tag_lts(false, "lts-slim-jdk11_arm32v6"),
-    tag_lts(false, "lts-slim"),
     tag_lts(true, "lts-slim-jdk11_arm32v6")
   ]
   platforms = ["linux/arm/v6"]
