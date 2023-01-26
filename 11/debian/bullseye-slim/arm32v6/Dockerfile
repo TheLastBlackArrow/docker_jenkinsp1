@@ -106,7 +106,7 @@ ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
 COPY 11/debian/bullseye-slim/arm32v6/install-java.sh ./install-java.sh
 RUN chmod u+x ./install-java.sh && ./install-java.sh
 
-ENV JAVA_HOME=/usr
+ENV JAVA_HOME=/opt/java/openjdk
 ENV PATH "${JAVA_HOME}/bin:${PATH}"
 # COPY --from=jre-build /javaruntime $JAVA_HOME
 
@@ -123,8 +123,8 @@ COPY install-plugins.sh /usr/local/bin/install-plugins.sh
 
 # metadata labels
 LABEL \
-    org.opencontainers.image.vendor="Jenkins project" \
-    org.opencontainers.image.title="Official Jenkins Docker image" \
+    org.opencontainers.image.vendor="Jenkins Arm32v6 project" \
+    org.opencontainers.image.title="Internal Jenkins Docker image for pi1" \
     org.opencontainers.image.description="The Jenkins Continuous Integration and Delivery server" \
     org.opencontainers.image.version="${JENKINS_VERSION}" \
     org.opencontainers.image.url="https://www.jenkins.io/" \
