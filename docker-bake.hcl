@@ -39,11 +39,11 @@ group "linux-s390x" {
 # ---- variables ----
 
 variable "JENKINS_VERSION" {
-  default = "2.383"
+  default = "2.375.2"
 }
 
 variable "JENKINS_SHA" {
-  default = "a871248a347a950c468ff119dea364fc477c679c743637fb128af8e95f51e559"
+  default = "e572525f7fa43b082e22896f72570297d88daec4f36ab4f25fdadca885f95492"
 }
 
 variable "REGISTRY" {
