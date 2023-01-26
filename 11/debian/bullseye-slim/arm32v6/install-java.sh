@@ -8,4 +8,3 @@ rm $javaZuluName.tar.gz
 mv $javaZuluName openjdk
 update-alternatives --install /usr/bin/java java /opt/java/openjdk/bin/java 1
 update-alternatives --install /usr/bin/javac javac /opt/java/openjdk/bin/javac 1
-ln -s /opt/java/openjdk/bin/java /usr/bin/java
