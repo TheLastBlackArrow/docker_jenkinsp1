@@ -104,8 +104,7 @@ EXPOSE ${agent_port}
 ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
 
 COPY 11/debian/bullseye-slim/arm32v6/install-java.sh ./install-java.sh
-USER root
-RUN chmod u+x ./install-java.sh && ./install-java.sh
+RUN ./install-java.sh
 
 ENV JAVA_HOME=/opt/java/openjdk
 ENV PATH "${JAVA_HOME}/bin:${PATH}"
