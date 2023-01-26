@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 mkdir -p /opt/java
 cd /opt/java || exit
 javaZuluName="zulu11.62.17-ca-jdk11.0.18-linux_aarch32hf"
