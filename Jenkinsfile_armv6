@@ -26,7 +26,7 @@ stage('Build') {
                 stage("Publish ${imageToBuild}") {
                     withCredentials([usernamePassword(credentialsId: 'DOCKER_TOKEN', passwordVariable: 'docker_pw', usernameVariable: 'docker_usr')]) {
                         sh """docker login -u $docker_usr -p $docker_pw
-                        docker push lelai123/jenkins_pi1:2.375.2-jdk11
+                        docker push lelai123/jenkins_pi1:lts-slim
                         """
                     }   
                 }

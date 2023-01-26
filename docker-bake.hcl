@@ -59,7 +59,7 @@ variable "LATEST_WEEKLY" {
 }
 
 variable "LATEST_LTS" {
-  default = "false"
+  default = "true"
 }
 
 variable "PLUGIN_CLI_VERSION" {
