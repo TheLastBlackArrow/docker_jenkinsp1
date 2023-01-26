@@ -224,8 +224,7 @@ target "debian_slim_jdk11_arm32v6" {
     PLUGIN_CLI_VERSION = PLUGIN_CLI_VERSION
   }
   tags = [
-    tag(true, ""),
-    tag_lts(true, "lts-slim-jdk11_arm32v6")
+    tag(true, "jdk11"),
   ]
   platforms = ["linux/arm/v6"]
 }
