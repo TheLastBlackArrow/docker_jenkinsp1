@@ -108,7 +108,7 @@ ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
 
 ENV JAVA_HOME=/opt/java/openjdk
 ENV PATH "${JAVA_HOME}/bin:${PATH}"
-COPY --from=jre-build $JAVA_HOME
+COPY jre-build $JAVA_HOME
 
 USER ${user}
 
