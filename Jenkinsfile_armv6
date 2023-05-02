@@ -12,7 +12,7 @@ stage('Build') {
     for (i in images) {
         def imageToBuild = i
         builds[imageToBuild] = {
-            node('pi1') {
+            node('pi1_agent') {
                 deleteDir()
 
                 stage('Checkout') {
