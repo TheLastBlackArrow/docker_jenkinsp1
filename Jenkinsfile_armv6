@@ -4,7 +4,7 @@ def listOfProperties = []
 listOfProperties << buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '2'))
 properties(listOfProperties)
 
-stage('Build') {
+stage('Checking Env') {
     def builds = [:]
     def images = [
         'debian_slim_jdk11_arm32v6',
