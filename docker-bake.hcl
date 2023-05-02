@@ -39,11 +39,11 @@ group "linux-s390x" {
 # ---- variables ----
 
 variable "JENKINS_VERSION" {
-  default = "2.375.2"
+  default = "2.387.2"
 }
 
 variable "JENKINS_SHA" {
-  default = "e572525f7fa43b082e22896f72570297d88daec4f36ab4f25fdadca885f95492"
+  default = "5e39cb06d9b9eb18a3218b45a07c6bbb801fb353b774eb5bf7749f891b500ca9"
 }
 
 variable "REGISTRY" {
@@ -63,7 +63,7 @@ variable "LATEST_LTS" {
 }
 
 variable "PLUGIN_CLI_VERSION" {
-  default = "2.12.9"
+  default = "2.12.11"
 }
 
 variable "COMMIT_SHA" {

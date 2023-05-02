@@ -1,5 +1,5 @@
 # No docker image support java 11 on arm32v6. Using Zulu instead
-# FROM eclipse-temurin:11.0.16.1_1-jdk-focal as jre-build
+FROM kyberpunk/openjdk-armv6:11-jre as jre-build
 
 # RUN jlink \
 #          --add-modules ALL-MODULE-PATH \
@@ -91,7 +91,7 @@ ENV JENKINS_UC_EXPERIMENTAL=https://updates.jenkins.io/experimental
 ENV JENKINS_INCREMENTALS_REPO_MIRROR=https://repo.jenkins-ci.org/incrementals
 RUN chown -R ${user} "$JENKINS_HOME" "$REF"
 
-ARG PLUGIN_CLI_VERSION=2.12.9
+ARG PLUGIN_CLI_VERSION=2.12.11
 ARG PLUGIN_CLI_URL=https://github.com/jenkinsci/plugin-installation-manager-tool/releases/download/${PLUGIN_CLI_VERSION}/jenkins-plugin-manager-${PLUGIN_CLI_VERSION}.jar
 RUN curl -fsSL ${PLUGIN_CLI_URL} -o /opt/jenkins-plugin-manager.jar
 
@@ -103,12 +103,12 @@ EXPOSE ${agent_port}
 
 ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
 
-COPY 11/debian/bullseye-slim/arm32v6/install-java.sh ./install-java.sh
-RUN chmod +x ./install-java.sh && ./install-java.sh
+# COPY 11/debian/bullseye-slim/arm32v6/install-java.sh ./install-java.sh
+# RUN chmod +x ./install-java.sh && ./install-java.sh
 
 ENV JAVA_HOME=/opt/java/openjdk
 ENV PATH "${JAVA_HOME}/bin:${PATH}"
-# COPY --from=jre-build /javaruntime $JAVA_HOME
+COPY --from=jre-build $JAVA_HOME
 
 USER ${user}
 
