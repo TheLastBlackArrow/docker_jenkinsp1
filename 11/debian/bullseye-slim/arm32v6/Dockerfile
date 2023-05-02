@@ -1,11 +1,11 @@
 # No docker image support java 11 on arm32v6. Using Zulu instead
-FROM kyberpunk/openjdk-armv6:11-jdk as jre-build
+FROM kyberpunk/openjdk-armv6:11-jre as jre-build
 
-RUN jlink \
-         --add-modules ALL-MODULE-PATH \
-         --no-man-pages \
-         --compress=2 \
-         --output /javaruntime
+# RUN jlink \
+#          --add-modules ALL-MODULE-PATH \
+#          --no-man-pages \
+#          --compress=2 \
+#          --output /javaruntime
 
 # always using latest cause pi1 will be supported by raspberian
 FROM debian:bullseye-slim
@@ -106,7 +106,7 @@ ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
 
 ENV JAVA_HOME=/opt/java/openjdk
 ENV PATH "${JAVA_HOME}/bin:${PATH}"
-COPY --from=jre-build /javaruntime $JAVA_HOME
+COPY --from=jre-build /opt/java $JAVA_HOME
 
 USER ${user}
 
