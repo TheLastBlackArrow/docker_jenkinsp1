@@ -8,7 +8,7 @@ FROM kyberpunk/openjdk-armv6:11-jre as jre-build
 #          --output /javaruntime
 
 # always using latest cause pi1 will be supported by raspberian
-FROM debian:bullseye-slim
+# FROM debian:bullseye-slim
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
@@ -103,11 +103,12 @@ ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
 
 # COPY 11/debian/bullseye-slim/arm32v6/install-java.sh ./install-java.sh
 # RUN chmod +x ./install-java.sh && ./install-java.sh
-USER ${user}
 
-ENV JAVA_HOME=/opt/java/openjdk
+ENV JAVA_HOME=/opt/java/jre
 ENV PATH "${JAVA_HOME}/bin:${PATH}"
-COPY --from=jre-build /opt/java/jre $JAVA_HOME
+# COPY --from=jre-build /opt/java/jre $JAVA_HOME
+
+USER ${user}
 
 COPY jenkins-support /usr/local/bin/jenkins-support
 COPY jenkins.sh /usr/local/bin/jenkins.sh
